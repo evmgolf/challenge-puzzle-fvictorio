@@ -89,10 +89,7 @@ contract Solve is Script {
       address challenge = challengeAddresses[i];
 
       // MUST encode description as hexadecimal to avoid arbitrary shell injection
-      bytes memory description = Challenges(challenges).descriptionOf(challenge.id());
-      emit log_challenge(challenge, string(description));
-      description = description.hexadecimal();
-      emit log_challenge(challenge, string(description));
+      bytes memory description = Challenges(challenges).descriptionOf(challenge.id()).hexadecimal();
       
       bytes memory challengeNumberRaw = bash.run(
         bytes.concat(

@@ -4,6 +4,7 @@ pragma solidity 0.8.13;
 import {Script} from "forge-std/Script.sol";
 import {Create2Deployer} from "foundry-create2-deployer/Create2Deployer.sol";
 import {EVMPuzzleDeployer} from "src/EVMPuzzle.sol";
+import {Hexadecimal} from "codec/Hexadecimal.sol";
 import {Create2} from "create2/Create2.sol";
 import {Programs} from "evmgolf/Programs.sol";
 import {Id, Challenges} from "evmgolf/Challenge.sol";
@@ -13,6 +14,7 @@ import {GraphQL} from "graphql/GraphQL.sol";
 
 contract Solve is Script {
   using Id for address;
+  using Hexadecimal for bytes;
 
   event log_challenge(address at, string desc);
   event log_program(address);
@@ -81,16 +83,22 @@ contract Solve is Script {
       "id"
     );
 
+    bytes memory search = bytes("EVM Puzzle from @fvictorio - #").hexadecimal();
+
     for (uint i=0;i<challengeAddresses.length;i++) {
       address challenge = challengeAddresses[i];
-      bytes memory description = Challenges(challenges).descriptionOf(challenge.id());
 
+      // MUST encode description as hexadecimal to avoid arbitrary shell injection
+      bytes memory description = Challenges(challenges).descriptionOf(challenge.id());
+      emit log_challenge(challenge, string(description));
+      description = description.hexadecimal();
+      emit log_challenge(challenge, string(description));
       
       bytes memory challengeNumberRaw = bash.run(
         bytes.concat(
           "echo '",
           description,
-          "'|sed 's/EVM Puzzle from @fvictorio - #//g'|cast --to-uint256"
+          "'|sed 's/", search, "//g'|cast --to-ascii|cast --to-uint256"
         ),
         ""
       );
@@ -111,6 +119,5 @@ contract Solve is Script {
     submit(abi.encode(uint(0xa)));
     submit(Create2.text(hex"00"));
     submit(Create2.text(hex"FD"));
-    emit log_program(address(this));
   } 
 }

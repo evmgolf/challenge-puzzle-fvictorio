@@ -1,0 +1,21 @@
+[submodule "lib/evmgolf"]
+	path = lib/evmgolf
+	url = https://github.com/evmgolf/evmgolf
+[submodule "lib/create2"]
+	path = lib/create2
+	url = https://github.com/evmgolf/create2
+[submodule "lib/forge-std"]
+	path = lib/forge-std
+	url = https://github.com/foundry-rs/forge-std
+[submodule "lib/solmate"]
+	path = lib/solmate
+	url = https://github.com/Rari-Capital/solmate
+[submodule "lib/foundry-create2-deployer"]
+	path = lib/foundry-create2-deployer
+	url = https://github.com/evmgolf/foundry-create2-deployer
+[submodule "lib/graphql"]
+	path = lib/graphql
+	url = https://github.com/evmgolf/graphql
+[submodule "lib/bash"]
+	path = lib/bash
+	url = https://github.com/evmgolf/bash
